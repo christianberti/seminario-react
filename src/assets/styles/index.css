@@ -1,0 +1,30 @@
+:root {
+  --primary-color: #0056b3;
+  --secondary-color: yellowgreen;
+  --bg-color: #02021b;
+  --bg-color2: #0d1252;
+  --text-color: #e7e7e7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-style: bold;
+}
+
+a:hover {
+   color: var(--secondary-color);
+}

@@ -1,0 +1,9 @@
+.header-link {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.header-logo {
+    max-width:50px;
+}

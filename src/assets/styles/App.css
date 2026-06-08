@@ -1,0 +1,15 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-navbar {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  background-color: var(--bg-color2);
+}
