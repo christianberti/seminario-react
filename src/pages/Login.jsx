@@ -7,6 +7,7 @@ import '../assets/styles/Login.css';
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [mensaje, setMensaje] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensaje('');
+    setLoading(true);
     
     try {
       const response = await api.post('/login', formData);
@@ -35,6 +37,8 @@ const Login = () => {
       navigate('/');
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Error al iniciar sesión. Verificá tus credenciales.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +66,9 @@ const Login = () => {
             required 
           />
         </div>
-        <button type="submit">Ingresar</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Ingresando...' : 'Ingresar'}
+        </button>
       </form>
       {mensaje && <p className="error">{mensaje}</p>}
     </main>

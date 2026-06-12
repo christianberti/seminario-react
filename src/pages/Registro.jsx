@@ -6,6 +6,7 @@ const RegistroPage = () => {
   const [formData, setFormData] = useState({ email: '', name: '', password: '' });
   const [errores, setErrores] = useState({});
   const [mensaje, setMensaje] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,6 +39,7 @@ const RegistroPage = () => {
 
     if (validar() === true) {
       try {
+        setLoading(true);
         await api.post('/users', formData);
         setMensaje('Registro exitoso. Ya podés iniciar sesión.');
         setFormData({ email: '', name: '', password: '' });
@@ -48,6 +50,8 @@ const RegistroPage = () => {
         } else {
           setMensaje('Error al registrar el usuario.');
         }
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -71,7 +75,9 @@ const RegistroPage = () => {
           <input type="password" name="password" value={formData.password} onChange={handleChange} />
           {errores.password && <p className="error">{errores.password}</p>}
         </div>
-        <button type="submit">Registrarse</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Registrando...' : 'Registrarse'}
+        </button>
       </form>
       {mensaje && <p className="mensaje-feedback">{mensaje}</p>}
     </main>
