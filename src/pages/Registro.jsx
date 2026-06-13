@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import api from '../utils/axiosConfig';
 import '../assets/styles/Registro.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const RegistroPage = () => {
   const [formData, setFormData] = useState({ email: '', name: '', password: '' });
   const [errores, setErrores] = useState({});
   const [mensaje, setMensaje] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -71,8 +73,11 @@ const RegistroPage = () => {
           {errores.name && <p className="error">{errores.name}</p>}
         </div>
         <div>
-          <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <label>Contraseña:</label>
+          <input  name="password" value={formData.password} onChange={handleChange} type={showPassword ? 'text' : 'password'}/>
+          <button type="button" className="password-toggle"onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
           {errores.password && <p className="error">{errores.password}</p>}
         </div>
         <button type="submit" disabled={loading}>

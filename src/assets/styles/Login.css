@@ -66,4 +66,12 @@
   margin-top: 5px;
 }
 
-
+.password-toggle {
+  width: auto !important;
+  padding: 6px;
+  margin-top: 5px;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

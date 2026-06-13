@@ -1,4 +1,4 @@
-.registro-container {
+.editar-container {
   width: 400px;
   margin: 50px auto;
   padding: 30px;
@@ -7,25 +7,25 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.registro-container h2 {
+.editar-container h2 {
   text-align: center;
   margin-bottom: 20px;
   color: var(--text-color);
 }
 
-.registro-container form div {
+.editar-container form div {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
-.registro-container label {
+.editar-container label {
   margin-bottom: 5px;
   font-size: 0.9rem;
   font-weight: bold;
 }
 
-.registro-container input {
+.editar-container input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -33,11 +33,11 @@
   outline: none;
 }
 
-.registro-container input:focus {
+.editar-container input:focus {
   border-color: var(--primary-color);
 }
 
-.registro-container button {
+.editar-container button {
   width: 100%;
   padding: 12px;
   background-color: var(--primary-color);
@@ -51,7 +51,7 @@
   transition: background-color 0.3s;
 }
 
-.registro-container button:hover {
+.editar-container button:hover {
   background-color: #003d82;
 }
 
@@ -59,6 +59,13 @@
   color: #dc3545;
   font-size: 0.85rem;
   margin-top: 5px;
+}
+
+.success {
+  color: #198754;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
 }
 
 .password-toggle {
@@ -69,4 +76,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.password-group {
+  display: flex;
+  flex-direction: column;
 }

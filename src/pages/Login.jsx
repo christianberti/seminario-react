@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import api from '../utils/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/Login.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [mensaje, setMensaje] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -57,21 +59,27 @@ const Login = () => {
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label>Contraseña:</label>
           <input 
-            type="password" 
+              type={showPassword ? 'text' : 'password'} 
             name="password" 
             value={formData.password} 
             onChange={handleChange}
             required 
           />
+          <button type={showPassword ? 'text' : 'password'} className="password-toggle"onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
         </div>
         <button type="submit" disabled={loading}>
           {loading ? 'Ingresando...' : 'Ingresar'}
         </button>
       </form>
       {mensaje && <p className="error">{mensaje}</p>}
+
     </main>
+
+    
   );
 };
 

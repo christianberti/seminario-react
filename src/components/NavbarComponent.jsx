@@ -50,7 +50,7 @@ const NavBarComponent = () => {
           <Link to="/portfolio">Mi portfolio</Link>
           <Link to="/operaciones">Mis operaciones</Link>
           <Link to="/panel">Ver Panel</Link>
-          <Link to="/editar">Editar usuario</Link>
+          <Link to="/editarPage">Editar usuario</Link>
           {auth.isAdmin && <Link to="/admin">Manejo usuarios</Link>}
           <button className="nav-logout-btn" onClick={handleLogout}>Logout</button>
         </>

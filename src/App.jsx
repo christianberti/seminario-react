@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Portfolio from './pages/Portfolio';
 import Panel from './pages/Panel';
 import Operaciones from './pages/Operaciones';
-import Editar from './pages/Editar';
+import EditarPage from './pages/EditarPage';
 import AdminPage from './pages/AdminPage';
 
 //Componentes
@@ -47,9 +47,9 @@ const App = () => {
             <Operaciones />
           </PrivateRoute>
         } />
-        <Route path="/editar" element={
+        <Route path="/editarpage" element={
           <PrivateRoute>
-            <Editar />
+            <EditarPage />
           </PrivateRoute>
         } />
 
