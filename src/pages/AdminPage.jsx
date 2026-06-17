@@ -28,7 +28,7 @@ useEffect(() => {
     const response = await api.get('/users');
 
     const filtrarAdmin = response.data.data.filter(
-      user => !user.is_Admin
+      user => !user.is_admin
     );
 
     setUsers(filtrarAdmin);

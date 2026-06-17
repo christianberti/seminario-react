@@ -77,9 +77,11 @@ const EditarPage = () => {
                 if (formData.password) {
                     updateData.password = formData.password;
                 }
-                await api.put(`/users/${auth.userId}`, updateData);
+                await api.put(`/users/${targetUserId}`, updateData);
                 setMensaje('Usuario actualizado correctamente');
-                updateUserInfo(formData.name);
+                if (!isAdminMode){
+                    updateUserInfo(formData.name);
+                }
                 setErrores({}); 
                 setFormData((prev) => ({ ...prev, password: '', confirmPassword: '' }));
                 setTimeout(() => setMensaje(''), 5000);
