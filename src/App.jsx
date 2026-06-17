@@ -53,6 +53,14 @@ const App = () => {
           </PrivateRoute>
         } />
 
+        <Route path="/editarpage/:userId" element={
+        <PrivateRoute>
+          <AdminRoute>
+            <EditarPage />
+          </AdminRoute>
+        </PrivateRoute>
+        } />
+
         {/* Ruta Admin */}
         <Route path="/admin" element={
           <PrivateRoute>
@@ -60,6 +68,7 @@ const App = () => {
               <AdminPage />
             </AdminRoute>
           </PrivateRoute>
+
         } />
       </Routes>
       <FooterComponent />

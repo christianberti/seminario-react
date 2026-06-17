@@ -1,8 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import api from '../utils/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/EditarPage.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 
 const EditarPage = () => { 
     const { auth, updateUserInfo } = useContext(AuthContext);
@@ -11,7 +12,10 @@ const EditarPage = () => {
     const [errores, setErrores] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+    const { userId } = useParams();
+    const isAdminMode = Boolean(userId);
+    const targetUserId = isAdminMode ? userId : auth.userId;
+ 
 
     const handleChange = (e) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,6 +23,26 @@ const EditarPage = () => {
         setMensaje('');
     };
 
+    useEffect(() => {
+    const loadUser = async () => {
+        try {
+        const id = isAdminMode ? userId : auth.userId;
+        const res = await api.get(`/users/${id}`);
+
+        setFormData({
+            name: res.data.data.name,
+            password: '',
+            confirmPassword: ''
+        });
+
+        } catch (err) {
+            setMensaje('Error al cargar usuario');
+        }
+    };
+
+    loadUser();
+    }, [userId]);
+    
     const validarForm = () => {
         const nuevosErrores = {};
         const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&+])[A-Za-z\d@$!%*?&+]{8,}$/;

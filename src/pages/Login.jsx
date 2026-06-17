@@ -67,7 +67,7 @@ const Login = () => {
             onChange={handleChange}
             required 
           />
-          <button type={showPassword ? 'text' : 'password'} className="password-toggle"onClick={() => setShowPassword(!showPassword)}>
+          <button type="button" className="password-toggle"onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
