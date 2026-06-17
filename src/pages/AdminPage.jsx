@@ -48,6 +48,10 @@ const filteredUsers = users.filter(user =>
 const indiceInicio = (paginaActual - 1) * usuariosPorPagina;
 const usuariosPaginados = filteredUsers.slice(indiceInicio, indiceInicio + usuariosPorPagina);
 
+const mejorUsuario = search === '' 
+  ? [...users].sort((a, b) => b.total_wealth - a.total_wealth)[0] 
+  : null;
+
 return (
   <main className="admin-container">
     <h2>Panel de Administración</h2>
@@ -72,7 +76,7 @@ return (
       </thead>
       <tbody>
         {usuariosPaginados.map((user, index) => (
-          <tr key={user.id} className={user.id === filteredUsers[0]?.id && search === '' ? 'Mejor-Portfolio' : ''}>
+          <tr key={user.id} className={mejorUsuario && user.id === mejorUsuario.id ? 'Mejor-Portfolio' : ''}>
             <td>{user.id}</td>
             <td>{user.name}</td>
             <td>${user.total_wealth.toFixed(2)}</td>

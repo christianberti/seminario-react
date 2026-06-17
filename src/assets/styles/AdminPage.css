@@ -1,0 +1,128 @@
+.admin-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--bg-color2);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--secondary-color);
+}
+
+.admin-container > input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 24px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+.admin-container > input:focus {
+  border-color: var(--primary-color);
+}
+
+.admin-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-container thead tr {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.admin-container th,
+.admin-container td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-container thead th button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.admin-container thead th button:hover {
+  color: #cce0ff;
+}
+
+.admin-container tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.Mejor-Portfolio {
+  background-color: rgba(255, 0, 0, 0.418);
+  font-weight: bold;
+}
+
+.Mejor-Portfolio td:nth-child(3) {
+  color: rgb(0, 0, 0);
+}
+
+.admin-container td button {
+  padding: 6px 14px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-container td button:hover {
+  background-color: #003d82;
+}
+
+.admin-container > button {
+  margin-top: 16px;
+  margin-right: 8px;
+  padding: 8px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-container > button:hover {
+  background-color: #003d82;
+}
+
+.admin-container > span {
+  margin-top: 16px;
+  margin-right: 8px;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  vertical-align: middle;
+}
+
+.admin-container hr {
+  margin-top: 24px;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-container > p {
+  margin-top: 12px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
