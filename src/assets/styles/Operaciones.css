@@ -1,0 +1,168 @@
+.operaciones-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--bg-color2);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.operaciones-title {
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+}
+
+.operaciones-description {
+  text-align: center;
+  margin-bottom: 35px;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.operaciones-filtros-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; 
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.operaciones-filtros-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.operaciones-field {
+  display: flex;
+  flex-direction: column; 
+  gap: 8px;
+}
+
+.operaciones-field label {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.operaciones-field select {
+  min-width: 180px;
+  padding: 10px 36px 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: #1a1f3d; 
+  color: var(--text-color);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.operaciones-field select:focus,
+.operaciones-field select:hover {
+  border-color: var(--primary-color);
+  background-color: #23294e;
+  outline: none;
+}
+
+.operaciones-field select option {
+  background-color: #1a1f3d;
+  color: var(--text-color);
+}
+
+.btn-limpiar {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 42px; 
+}
+
+.btn-limpiar:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.operaciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.operaciones-table thead {
+  background-color: rgba(255, 255, 255, 0.03); 
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.operaciones-table th {
+  padding: 16px;
+  text-align: left;
+  color: var(--secondary-color); 
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.operaciones-table td {
+  padding: 16px;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.operaciones-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.operaciones-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.operaciones-vacio {
+  text-align: center;
+  color: var(--text-color);
+  padding: 40px 0;
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .operaciones-filtros-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .operaciones-filtros-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .operaciones-field select, 
+  .btn-limpiar {
+    width: 100%;
+  }
+}
+
+.operaciones-table td.tipo-compra {
+  color: #00ff08 !important;
+  font-weight: 500;
+}
+
+.operaciones-table td.tipo-venta {
+  color: #f44336 !important;
+  font-weight: 500;
+}
