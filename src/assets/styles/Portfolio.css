@@ -6,3 +6,37 @@
     display: inline-block;
     margin-bottom: 10px;
 }
+.portfolio-list {
+  margin-top: 20px;
+}
+
+.portfolio-card {
+  border: 1px solid white;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.portfolio-card h3 {
+  margin-top: 0;
+}
+
+.portfolio-up {
+  color: green;
+}
+
+.portfolio-down {
+  color: red;
+}
+.portfolio-actions {
+  margin-top: 12px;
+}
+
+.portfolio-actions input {
+  width: 80px;
+  margin-bottom: 6px;
+}
+
+.portfolio-actions button {
+  display: block;
+  margin-bottom: 10px;
+}
