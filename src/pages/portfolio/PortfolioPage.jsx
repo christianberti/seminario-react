@@ -22,25 +22,86 @@ const PortFolioPage = () => {
     const [cantidadesCompra, setCantidadesCompra] = useState({});
     const [cantidadesVenta, setCantidadesVenta] = useState({});
 
+    const [erroresOperacion, setErroresOperacion] = useState({});
+
+
+
+    const cargarDatos = async () => {
+        try {
+
+            const portfolioResponse = await api.get(`/portfolio`);
+            setPortfolio(portfolioResponse.data.data);
+
+            const response = await api.get(`users/${auth.userId}`);
+            const userData = response.data.data;
+
+            setDineroDisponible(userData.balance);
+        } catch (error) {
+
+            setMensaje(error.response?.data?.message || 'Error al cargar los datos del usuario');
+        } finally {
+            setCargando(false);
+        }
+    }; 
+    
+    const comprarAsset = async (asset) => {
+        const esValido = validarCompra(asset);
+
+        if (!esValido) {
+            return;
+        }
+
+        try {
+            const cantidad = Number(cantidadesCompra[asset.asset_id]);
+
+            await api.post('/trade/buy', {
+            asset_id: asset.asset_id,
+            quantity: cantidad
+            });
+
+            setMensaje('Compra realizada con exito');
+
+            setCantidadesCompra({
+            ...cantidadesCompra,
+            [asset.asset_id]: ''
+            });
+
+            await cargarDatos();
+        } catch (error) {
+            setMensaje(error.response?.data?.message || 'Error al realizar la compra');
+        }
+    };
+
+
+    const venderAsset = async (asset) => {
+        const esValido = validarVenta(asset);
+
+        if (!esValido) {
+            return;
+        }
+
+        try {
+            const cantidad = Number(cantidadesVenta[asset.asset_id]);
+
+            await api.post('/trade/sell', {
+            asset_id: asset.asset_id,
+            quantity: cantidad
+            });
+
+            setMensaje('Venta realizada con exito');
+
+            setCantidadesVenta({
+            ...cantidadesVenta,
+            [asset.asset_id]: ''
+            });
+
+            await cargarDatos();
+        } catch (error) {
+            setMensaje(error.response?.data?.message || 'Error al realizar la venta');
+        }
+    };
     useEffect(() => {
-        const cargarDatos = async () => {
-            try {
 
-                const portfolioResponse = await api.get(`/portfolio`);
-                setPortfolio(portfolioResponse.data.data);
-
-                const response = await api.get(`users/${auth.userId}`);
-                const userData = response.data.data;
-
-                console.log('USER DATA:', userData);
-                setDineroDisponible(userData.balance);
-            } catch (error) {
-
-                setMensaje(error.response?.data?.message || 'Error al cargar los datos del usuario');
-            } finally {
-                setCargando(false);
-            }
-        };
 
         cargarDatos();
         const interval = setInterval(cargarDatos, REFRESH_INTERVAL);
@@ -65,6 +126,86 @@ const PortFolioPage = () => {
             [assetId]: value
         });
     };
+
+const validarCompra = (asset) => {
+  const assetId = asset.asset_id;
+  const precioActual = Number(asset.current_price);
+  const cantidad = Number(cantidadesCompra[assetId]);
+  const costo = cantidad * precioActual;
+
+  if (!cantidad || cantidad <= 0) {
+    setErroresOperacion({
+      ...erroresOperacion,
+      [assetId]: 'Ingrese una cantidad para comprar'
+    });
+    return false;
+  }
+
+  if (cantidad > 20) {
+    setErroresOperacion({
+      ...erroresOperacion,
+      [assetId]: 'No puede comprar mas de 20 unidades'
+    });
+    return false;
+  }
+
+  if (costo > Number(dineroDisponible)) {
+    setErroresOperacion({
+      ...erroresOperacion,
+      [assetId]: 'Saldo insuficiente para esta operación'
+    });
+    return false;
+  }
+
+  setErroresOperacion({
+    ...erroresOperacion,
+    [assetId]: ''
+  });
+
+  return true;
+};
+
+const validarVenta = (asset) => {
+    const assetId = asset.asset_id;
+    const cantidadAVender = Number(cantidadesVenta[assetId]);
+    const cantidadDisponible = Number(asset.quantity);
+
+    if (!cantidadAVender || cantidadAVender <= 0) {
+        setErroresOperacion({
+        ...erroresOperacion,
+        [assetId]: 'Ingrese una cantidad para vender'
+        });
+        return false;
+    }
+
+    if (cantidadAVender > cantidadDisponible) {
+        setErroresOperacion({
+        ...erroresOperacion,
+        [assetId]: 'No puede vender mas de lo que posee'
+        });
+        return false;
+    }
+
+    setErroresOperacion({
+        ...erroresOperacion,
+        [assetId]: ''
+    });
+
+    return true;
+};
+
+    const eliminarAsset = async (asset) => {
+    try {
+        await api.delete(`/portfolio/${asset.asset_id}`);
+
+        setMensaje('Activo eliminado correctamente');
+
+        await cargarDatos();
+    } catch (error) {
+        setMensaje(error.response?.data?.message || 'Error al eliminar el activo');
+    }
+    };
+
     return (
         <main className="portfolio-container">
             <h2> Mi portfolio</h2>
@@ -97,50 +238,63 @@ const PortFolioPage = () => {
                             <div className="portfolio-actions">
 
 
-                            <div>
-                                <h4>Comprar</h4>
-                                <input
-                                type="number"
-                                min="1"
-                                max="20"
-                                value={cantidadesCompra[asset.asset_id] || ''}
-                                onChange={(e) => cambiarCantidadCompra(asset.asset_id, e.target.value)}
-                                disabled={Number(dineroDisponible) === 0}
-                                />
+                                <div>
+                                    <h4>Comprar</h4>
+                                    <input
+                                    type="number"
+                                    min="1"
+                                    max="20"
+                                    value={cantidadesCompra[asset.asset_id] || ''}
+                                    onChange={(e) => cambiarCantidadCompra(asset.asset_id, e.target.value)}
+                                    disabled={Number(dineroDisponible) === 0}
+                                    />
 
-                                <p>
-                                Costo estimado: $
-                                {((Number(cantidadesCompra[asset.asset_id]) || 0) * precioActual).toFixed(2)}
-                                </p>
+                                    <p>
+                                    Costo estimado: $
+                                    {((Number(cantidadesCompra[asset.asset_id]) || 0) * precioActual).toFixed(2)}
+                                    </p>
 
-                                {Number(dineroDisponible) === 0 && (
-                                <p className="portfolio-error">No tenes saldo disponible</p>
+                                    {Number(dineroDisponible) === 0 && (
+                                    <p className="portfolio-error">No tenes saldo disponible</p>
+                                    )}
+
+                                    <button 
+                                        disabled={Number(dineroDisponible) === 0}
+                                        onClick={() => comprarAsset(asset)}
+                                    >
+                                    Comprar
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <h4>Vender</h4>
+                                    <input
+                                    type="number"
+                                    min="1"
+                                    max={cantidad}
+                                    value={cantidadesVenta[asset.asset_id] || ''}
+                                    onChange={(e) => cambiarCantidadVenta(asset.asset_id, e.target.value)}
+                                    />
+
+                                    <p>
+                                    Ganancia estimada: $
+                                    {((Number(cantidadesVenta[asset.asset_id]) || 0) * precioActual).toFixed(2)}
+                                    </p>
+
+                                    <button 
+                                        onClick={() => venderAsset(asset)}
+                                    >
+                                    Vender
+                                    </button>
+                                    {erroresOperacion[asset.asset_id] && (
+                                    <p className="portfolio-error">{erroresOperacion[asset.asset_id]}</p>
+                                    )}
+                                </div>
+                                {cantidad === 0 && (
+                                    <button onClick={() => eliminarAsset(asset)}>
+                                        Eliminar
+                                    </button>
                                 )}
-
-                                <button disabled={Number(dineroDisponible) === 0}>
-                                Comprar
-                                </button>
-                            </div>
-
-                            <div>
-                                <h4>Vender</h4>
-                                <input
-                                type="number"
-                                min="1"
-                                max={cantidad}
-                                value={cantidadesVenta[asset.asset_id] || ''}
-                                onChange={(e) => cambiarCantidadVenta(asset.asset_id, e.target.value)}
-                                />
-
-                                <p>
-                                Ganancia estimada: $
-                                {((Number(cantidadesVenta[asset.asset_id]) || 0) * precioActual).toFixed(2)}
-                                </p>
-
-                                <button>
-                                Vender
-                                </button>
-                            </div>
                             </div>
                         </article>                    
                         );
