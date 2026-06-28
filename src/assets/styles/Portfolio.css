@@ -1,11 +1,16 @@
 .portfolio-container {
-    padding: 20px;
+  padding: 20px;
 }
 
-.porfolio-link {
-    display: inline-block;
-    margin-bottom: 10px;
+.portfolio-loading {
+  padding: 20px;
 }
+
+.portfolio-link {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
 .portfolio-list {
   margin-top: 20px;
 }
@@ -16,17 +21,11 @@
   margin-bottom: 12px;
 }
 
-.portfolio-card h3 {
+.portfolio-card h3,
+.portfolio-card h4 {
   margin-top: 0;
 }
 
-.portfolio-up {
-  color: green;
-}
-
-.portfolio-down {
-  color: red;
-}
 .portfolio-actions {
   margin-top: 12px;
 }
@@ -39,4 +38,20 @@
 .portfolio-actions button {
   display: block;
   margin-bottom: 10px;
+}
+
+.portfolio-message {
+  color: white;
+}
+
+.portfolio-error {
+  color: red;
+}
+
+.portfolio-up {
+  color: green;
+}
+
+.portfolio-down {
+  color: red;
 }
