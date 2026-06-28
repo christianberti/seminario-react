@@ -30,7 +30,26 @@ const PortFolioPage = () => {
         try {
 
             const portfolioResponse = await api.get(`/portfolio`);
-            setPortfolio(portfolioResponse.data.data);
+
+            const transactionsResponse = await api.get('/transactions');
+            const operaciones = transactionsResponse.data.data;
+
+            const portfolioConPrecioCompra = portfolioResponse.data.data.map((asset) => {
+                const compra = operaciones.find((op) =>
+                    op.asset_id === asset.asset_id && op.transaction_type === 'buy'
+                );
+
+                return {
+                    ...asset,
+                    purchase_price: compra ? compra.price_per_unit : asset.current_price
+                };
+            });
+
+            setPortfolio(portfolioConPrecioCompra);
+
+
+
+            
 
             const response = await api.get(`users/${auth.userId}`);
             const userData = response.data.data;
@@ -220,19 +239,20 @@ const validarVenta = (asset) => {
             <section className="portfolio-list">
                 {portfolio.map((asset) => {
                     const precioActual = Number(asset.current_price);
+                    const precioCompra = Number(asset.purchase_price);
                     const cantidad = Number(asset.quantity);
                     const valorActual = Number(asset.total_value);
-                    const subio = asset.current_price > asset.purchase_price;
+                    const subio = precioActual >= precioCompra;
 
                     return (
                         <article className="portfolio-card" key={asset.asset_id}>
                             <h3>{asset.asset_name}</h3>
 
-                            <p> Precio de compra: ${precioActual.toFixed(2)}</p>
+                            <p>Precio de compra: ${precioCompra.toFixed(2)}</p>
                             <p> Cantidad: {cantidad}</p>
                             <p> Valor actual: ${valorActual.toFixed(2)}</p>
                             <p className={subio ? "portfolio-up" : "portfolio-down"}>
-                                {subio ? "Subió" : "Bajó"}
+                            {subio ? "Subio" : "Bajo"}
                             </p>
 
                             <div className="portfolio-actions">
