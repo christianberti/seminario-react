@@ -1,11 +1,10 @@
-
 import { Routes, Route, Link } from 'react-router-dom';
 import './assets/styles/App.css';
 
 //Paginas
 import Registro from './pages/Registro';
 import Login from './pages/Login';
-import Portfolio from './pages/Portfolio';
+import PortfolioPage from './pages/portfolio/PortfolioPage';
 import Panel from './pages/Panel';
 import Operaciones from './pages/Operaciones';
 import EditarPage from './pages/EditarPage';
@@ -34,7 +33,7 @@ const App = () => {
         {/* Rutas privadas (requieren login) */}
         <Route path="/portfolio" element={
           <PrivateRoute>
-            <Portfolio />
+            <PortfolioPage />
           </PrivateRoute>
         } />
         <Route path="/panel" element={
