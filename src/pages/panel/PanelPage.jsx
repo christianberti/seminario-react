@@ -13,119 +13,146 @@ const PanelPage = () => {
     const [erroresCompra, setErroresCompra] = useState({});
     const cargarAssets = async () => {
         try {
-        const response = await api.get('/assets');
-        const userResponse = await api.get(`/users/${auth.userId}`);
-        setDineroDisponible(userResponse.data.data.balance);
-        setAssets(response.data.data);
+            const response = await api.get('/assets');
+            const userResponse = await api.get(`/users/${auth.userId}`);
+            setDineroDisponible(userResponse.data.data.balance);
+            setAssets(response.data.data);
         } catch (error) {
-        setMensaje(error.response?.data?.message || 'Error al cargar los assets');
+            setMensaje(error.response?.data?.message || 'Error al cargar los assets');
         } finally {
-        setCargando(false);
+            setCargando(false);
         }
     };
 
-useEffect(() => {
-  cargarAssets();
+    useEffect(() => {
+        cargarAssets();
 
-  const interval = setInterval(cargarAssets, REFRESH_INTERVAL);
+        const interval = setInterval(cargarAssets, REFRESH_INTERVAL);
 
-  return () => clearInterval(interval);
-}, [auth.userId]);
+        return () => clearInterval(interval);
+    }, [auth.userId]);
 
     if (cargando) {
         return <p className="panel-loading">Cargando assets...</p>;
     }
     const cambiarCantidadCompra = (assetId, value) => {
-    setCantidadesCompra({
-        ...cantidadesCompra,
-        [assetId]: value
-    });
+        setCantidadesCompra({
+            ...cantidadesCompra,
+            [assetId]: value
+        });
     };
 
     const validarCompra = (asset) => {
-    const assetId = asset.id;
-    const precioActual = Number(asset.current_price);
-    const cantidad = Number(cantidadesCompra[assetId]);
-    const costo = cantidad * precioActual;
+        const assetId = asset.id;
+        const precioActual = Number(asset.current_price);
+        const cantidad = Number(cantidadesCompra[assetId]);
+        const costo = cantidad * precioActual;
 
-    if (!cantidad || cantidad <= 0) {
+        if (!cantidad || cantidad <= 0) {
+            setErroresCompra({
+                ...erroresCompra,
+                [assetId]: 'Ingrese una cantidad para comprar'
+            });
+            return false;
+        }
+
+        if (cantidad > 20) {
+            setErroresCompra({
+                ...erroresCompra,
+                [assetId]: 'No puede comprar mas de 20 unidades'
+            });
+            return false;
+        }
+
+        if (costo > Number(dineroDisponible)) {
+            setErroresCompra({
+                ...erroresCompra,
+                [assetId]: 'Saldo insuficiente para esta operación'
+            });
+            return false;
+        }
+
         setErroresCompra({
-        ...erroresCompra,
-        [assetId]: 'Ingrese una cantidad para comprar'
+            ...erroresCompra,
+            [assetId]: ''
         });
-        return false;
-    }
 
-    if (cantidad > 20) {
-        setErroresCompra({
-        ...erroresCompra,
-        [assetId]: 'No puede comprar mas de 20 unidades'
-        });
-        return false;
-    }
-
-    if (costo > Number(dineroDisponible)) {
-        setErroresCompra({
-        ...erroresCompra,
-        [assetId]: 'Saldo insuficiente para esta operación'
-        });
-        return false;
-    }
-
-    setErroresCompra({
-        ...erroresCompra,
-        [assetId]: ''
-    });
-
-    return true;
+        return true;
     };
-  return (
-    <main className="panel-container">
-    <h2>Panel</h2>
+    const comprarAsset = async (asset) => {
+        const esValido = validarCompra(asset);
 
-    {mensaje && <p className="panel-error">{mensaje}</p>}
-    <p>Dinero disponible: ${Number(dineroDisponible).toFixed(2)}</p>
-      <section className="panel-list">
-        {assets.map((asset) => {
-            const precioActual = Number(asset.current_price);
-            const cantidadCompra = Number(cantidadesCompra[asset.id]) || 0;
-            const costoEstimado = cantidadCompra * precioActual;
-            const cantidadMaxima = Math.min(20, Math.floor(Number(dineroDisponible) / precioActual));
+        if (!esValido) {
+            return;
+        }
 
-            return (
-                <article className="panel-card" key={asset.id}>
-                <h3>{asset.name}</h3>
-                <p>Precio actual: ${precioActual.toFixed(2)}</p>
+        try {
+            const cantidad = Number(cantidadesCompra[asset.id]);
 
-                <div className="panel-buy">
-                    <label>Cantidad:</label>
-                    <input
-                    type="number"
-                    min="1"
-                    max={cantidadMaxima}
-                    value={cantidadesCompra[asset.id] || ''}
-                    onChange={(e) => cambiarCantidadCompra(asset.id, e.target.value)}
-                    disabled={Number(dineroDisponible) === 0}
-                    />
+            await api.post('/trade/buy', {
+                asset_id: asset.id,
+                quantity: cantidad
+            });
 
-                    <p>Costo estimado: ${costoEstimado.toFixed(2)}</p>
+            setMensaje('Compra realizada con exito');
 
-                    <button
-                    disabled={Number(dineroDisponible) === 0}
-                    onClick={() => validarCompra(asset)}
-                    >
-                    Comprar
-                    </button>
-                    {erroresCompra[asset.id] && (
-                        <p className="panel-error">{erroresCompra[asset.id]}</p>
-                    )}
-                </div>
-                </article>
-            );
-            })}
-      </section>
-    </main>
-  );
+            setCantidadesCompra({
+                ...cantidadesCompra,
+                [asset.id]: ''
+            });
+
+            await cargarAssets();
+        } catch (error) {
+            setMensaje(error.response?.data?.message || 'Error al realizar la compra');
+        }
+    };
+    return (
+        <main className="panel-container">
+            <h2>Panel</h2>
+
+            {mensaje && <p className="panel-error">{mensaje}</p>}
+            <p>Dinero disponible: ${Number(dineroDisponible).toFixed(2)}</p>
+            <section className="panel-list">
+                {assets.map((asset) => {
+                    const precioActual = Number(asset.current_price);
+                    const cantidadCompra = Number(cantidadesCompra[asset.id]) || 0;
+                    const costoEstimado = cantidadCompra * precioActual;
+                    const cantidadMaxima = Math.min(20, Math.floor(Number(dineroDisponible) / precioActual));
+
+                    return (
+                        <article className="panel-card" key={asset.id}>
+                            <h3>{asset.name}</h3>
+                            <p>Precio actual: ${precioActual.toFixed(2)}</p>
+
+                            <div className="panel-buy">
+                                <label>Cantidad:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={cantidadMaxima}
+                                    value={cantidadesCompra[asset.id] || ''}
+                                    onChange={(e) => cambiarCantidadCompra(asset.id, e.target.value)}
+                                    disabled={Number(dineroDisponible) === 0}
+                                />
+
+                                <p>Costo estimado: ${costoEstimado.toFixed(2)}</p>
+
+                                <button
+                                    disabled={Number(dineroDisponible) === 0}
+                                    onClick={() => comprarAsset(asset)}
+                                >
+                                    Comprar
+                                </button>
+                                {erroresCompra[asset.id] && (
+                                    <p className="panel-error">{erroresCompra[asset.id]}</p>
+                                )}
+                            </div>
+                        </article>
+                    );
+                })}
+            </section>
+        </main>
+    );
 };
 
 export default PanelPage;
