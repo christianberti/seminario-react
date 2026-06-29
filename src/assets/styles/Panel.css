@@ -23,3 +23,17 @@
 .panel-error {
   color: red;
 }
+.panel-buy {
+  margin-top: 12px;
+}
+
+.panel-buy input {
+  width: 80px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+}
+
+.panel-buy button {
+  display: block;
+  margin-top: 6px;
+}

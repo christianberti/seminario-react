@@ -9,7 +9,7 @@ const PanelPage = () => {
     const [mensaje, setMensaje] = useState('');
     const { auth } = useContext(AuthContext);
     const [dineroDisponible, setDineroDisponible] = useState(0);
-
+    const [cantidadesCompra, setCantidadesCompra] = useState({});
 
     const cargarAssets = async () => {
         try {
@@ -32,10 +32,15 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [auth.userId]);
 
-  if (cargando) {
-    return <p className="panel-loading">Cargando assets...</p>;
-  }
-
+    if (cargando) {
+        return <p className="panel-loading">Cargando assets...</p>;
+    }
+    const cambiarCantidadCompra = (assetId, value) => {
+    setCantidadesCompra({
+        ...cantidadesCompra,
+        [assetId]: value
+    });
+    };
   return (
     <main className="panel-container">
     <h2>Panel</h2>
@@ -43,12 +48,36 @@ useEffect(() => {
     {mensaje && <p className="panel-error">{mensaje}</p>}
     <p>Dinero disponible: ${Number(dineroDisponible).toFixed(2)}</p>
       <section className="panel-list">
-        {assets.map((asset) => (
-          <article className="panel-card" key={asset.id}>
-            <h3>{asset.name}</h3>
-            <p>Precio actual: ${Number(asset.current_price).toFixed(2)}</p>
-          </article>
-        ))}
+        {assets.map((asset) => {
+            const precioActual = Number(asset.current_price);
+            const cantidadCompra = Number(cantidadesCompra[asset.id]) || 0;
+            const costoEstimado = cantidadCompra * precioActual;
+
+            return (
+                <article className="panel-card" key={asset.id}>
+                <h3>{asset.name}</h3>
+                <p>Precio actual: ${precioActual.toFixed(2)}</p>
+
+                <div className="panel-buy">
+                    <label>Cantidad:</label>
+                    <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={cantidadesCompra[asset.id] || ''}
+                    onChange={(e) => cambiarCantidadCompra(asset.id, e.target.value)}
+                    disabled={Number(dineroDisponible) === 0}
+                    />
+
+                    <p>Costo estimado: ${costoEstimado.toFixed(2)}</p>
+
+                    <button disabled={Number(dineroDisponible) === 0}>
+                    Comprar
+                    </button>
+                </div>
+                </article>
+            );
+            })}
       </section>
     </main>
   );
