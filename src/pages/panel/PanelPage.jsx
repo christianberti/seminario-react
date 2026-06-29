@@ -124,6 +124,10 @@ const PanelPage = () => {
             setCargandoHistorial(false);
         }
     };
+    const cerrarHistorial = () => {
+        setHistorialAsset(null);
+        setHistorialPrecios([]);
+    };
     return (
         <main className="panel-container">
             <h2>Panel</h2>
@@ -175,7 +179,7 @@ const PanelPage = () => {
             </section>
             {historialAsset && (
                 <section className="panel-history">
-                    <button onClick={() => setHistorialAsset(null)}>
+                    <button onClick={cerrarHistorial}>
                         Cerrar
                     </button>
 
