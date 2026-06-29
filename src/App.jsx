@@ -5,8 +5,8 @@ import './assets/styles/App.css';
 import Registro from './pages/Registro';
 import Login from './pages/Login';
 import PortfolioPage from './pages/portfolio/PortfolioPage';
-import Panel from './pages/Panel';
-import Operaciones from './pages/Operaciones';
+import PanelPage from './pages/panel/PanelPage';
+import OperacionesPage from './pages/operaciones/OperacionesPage';
 import EditarPage from './pages/EditarPage';
 import AdminPage from './pages/AdminPage';
 
@@ -38,12 +38,12 @@ const App = () => {
         } />
         <Route path="/panel" element={
           <PrivateRoute>
-            <Panel />
+            <PanelPage />
           </PrivateRoute>
         } />
         <Route path="/operaciones" element={
           <PrivateRoute>
-            <Operaciones />
+            <OperacionesPage />
           </PrivateRoute>
         } />
         <Route path="/editarpage" element={
