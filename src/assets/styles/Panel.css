@@ -37,3 +37,12 @@
   display: block;
   margin-top: 6px;
 }
+.panel-history {
+  border: 1px solid white;
+  padding: 12px;
+  margin-top: 20px;
+}
+
+.panel-history button {
+  margin-bottom: 10px;
+}

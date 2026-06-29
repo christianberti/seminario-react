@@ -11,6 +11,9 @@ const PanelPage = () => {
     const [dineroDisponible, setDineroDisponible] = useState(0);
     const [cantidadesCompra, setCantidadesCompra] = useState({});
     const [erroresCompra, setErroresCompra] = useState({});
+    const [historialAsset, setHistorialAsset] = useState(null);
+    const [historialPrecios, setHistorialPrecios] = useState([]);
+    const [cargandoHistorial, setCargandoHistorial] = useState(false);
     const cargarAssets = async () => {
         try {
             const response = await api.get('/assets');
@@ -106,6 +109,20 @@ const PanelPage = () => {
             setMensaje(error.response?.data?.message || 'Error al realizar la compra');
         }
     };
+    const verHistorial = async (asset) => {
+        try {
+            setCargandoHistorial(true);
+            setHistorialAsset(asset);
+            setHistorialPrecios([]);
+
+            const response = await api.get(`/assets/${asset.id}/history/5`);
+            setHistorialPrecios(response.data.data);
+        } catch (error) {
+            setMensaje(error.response?.data?.message || 'Error al cargar el historial de precios');
+        } finally {
+            setCargandoHistorial(false);
+        }
+    };
     return (
         <main className="panel-container">
             <h2>Panel</h2>
@@ -118,6 +135,7 @@ const PanelPage = () => {
                     const cantidadCompra = Number(cantidadesCompra[asset.id]) || 0;
                     const costoEstimado = cantidadCompra * precioActual;
                     const cantidadMaxima = Math.min(20, Math.floor(Number(dineroDisponible) / precioActual));
+
 
                     return (
                         <article className="panel-card" key={asset.id}>
@@ -143,6 +161,9 @@ const PanelPage = () => {
                                 >
                                     Comprar
                                 </button>
+                                <button onClick={() => verHistorial(asset)}>
+                                    Ver historial
+                                </button>
                                 {erroresCompra[asset.id] && (
                                     <p className="panel-error">{erroresCompra[asset.id]}</p>
                                 )}
@@ -151,6 +172,27 @@ const PanelPage = () => {
                     );
                 })}
             </section>
+            {historialAsset && (
+                <section className="panel-history">
+                    <button onClick={() => setHistorialAsset(null)}>
+                        Cerrar
+                    </button>
+
+                    <h3>Historial de {historialAsset.name}</h3>
+
+                    {cargandoHistorial ? (
+                        <p>Cargando historial...</p>
+                    ) : (
+                        <ul>
+                            {historialPrecios.map((item, index) => (
+                                <li key={index}>
+                                    ${Number(item.price).toFixed(2)}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
+            )}
         </main>
     );
 };
