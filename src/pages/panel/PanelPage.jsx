@@ -10,7 +10,7 @@ const PanelPage = () => {
     const { auth } = useContext(AuthContext);
     const [dineroDisponible, setDineroDisponible] = useState(0);
     const [cantidadesCompra, setCantidadesCompra] = useState({});
-
+    const [erroresCompra, setErroresCompra] = useState({});
     const cargarAssets = async () => {
         try {
         const response = await api.get('/assets');
@@ -41,6 +41,44 @@ useEffect(() => {
         [assetId]: value
     });
     };
+
+    const validarCompra = (asset) => {
+    const assetId = asset.id;
+    const precioActual = Number(asset.current_price);
+    const cantidad = Number(cantidadesCompra[assetId]);
+    const costo = cantidad * precioActual;
+
+    if (!cantidad || cantidad <= 0) {
+        setErroresCompra({
+        ...erroresCompra,
+        [assetId]: 'Ingrese una cantidad para comprar'
+        });
+        return false;
+    }
+
+    if (cantidad > 20) {
+        setErroresCompra({
+        ...erroresCompra,
+        [assetId]: 'No puede comprar mas de 20 unidades'
+        });
+        return false;
+    }
+
+    if (costo > Number(dineroDisponible)) {
+        setErroresCompra({
+        ...erroresCompra,
+        [assetId]: 'Saldo insuficiente para esta operación'
+        });
+        return false;
+    }
+
+    setErroresCompra({
+        ...erroresCompra,
+        [assetId]: ''
+    });
+
+    return true;
+    };
   return (
     <main className="panel-container">
     <h2>Panel</h2>
@@ -52,6 +90,7 @@ useEffect(() => {
             const precioActual = Number(asset.current_price);
             const cantidadCompra = Number(cantidadesCompra[asset.id]) || 0;
             const costoEstimado = cantidadCompra * precioActual;
+            const cantidadMaxima = Math.min(20, Math.floor(Number(dineroDisponible) / precioActual));
 
             return (
                 <article className="panel-card" key={asset.id}>
@@ -63,7 +102,7 @@ useEffect(() => {
                     <input
                     type="number"
                     min="1"
-                    max="20"
+                    max={cantidadMaxima}
                     value={cantidadesCompra[asset.id] || ''}
                     onChange={(e) => cambiarCantidadCompra(asset.id, e.target.value)}
                     disabled={Number(dineroDisponible) === 0}
@@ -71,9 +110,15 @@ useEffect(() => {
 
                     <p>Costo estimado: ${costoEstimado.toFixed(2)}</p>
 
-                    <button disabled={Number(dineroDisponible) === 0}>
+                    <button
+                    disabled={Number(dineroDisponible) === 0}
+                    onClick={() => validarCompra(asset)}
+                    >
                     Comprar
                     </button>
+                    {erroresCompra[asset.id] && (
+                        <p className="panel-error">{erroresCompra[asset.id]}</p>
+                    )}
                 </div>
                 </article>
             );
