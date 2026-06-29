@@ -3,6 +3,7 @@ import api from '../../utils/axiosConfig';
 import '../../assets/styles/Panel.css';
 import { REFRESH_INTERVAL } from '../../utils/constants';
 import { AuthContext } from '../../context/AuthContext';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 const PanelPage = () => {
     const [assets, setAssets] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -183,13 +184,20 @@ const PanelPage = () => {
                     {cargandoHistorial ? (
                         <p>Cargando historial...</p>
                     ) : (
-                        <ul>
-                            {historialPrecios.map((item, index) => (
-                                <li key={index}>
-                                    ${Number(item.price).toFixed(2)}
-                                </li>
-                            ))}
-                        </ul>
+                        <LineChart
+                            width={500}
+                            height={250}
+                            data={historialPrecios.map((item, index) => ({
+                                nombre: `Valor ${index + 1}`,
+                                precio: Number(item.price)
+                            }))}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="nombre" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="precio" stroke="#00ff66" />
+                        </LineChart>
                     )}
                 </section>
             )}
