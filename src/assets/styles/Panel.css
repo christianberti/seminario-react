@@ -1,3 +1,25 @@
 .panel-container {
   padding: 20px;
 }
+
+.panel-loading {
+  padding: 20px;
+}
+
+.panel-list {
+  margin-top: 20px;
+}
+
+.panel-card {
+  border: 1px solid white;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-card h3 {
+  margin-top: 0;
+}
+
+.panel-error {
+  color: red;
+}
