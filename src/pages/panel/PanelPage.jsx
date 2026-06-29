@@ -1,26 +1,32 @@
 import { useEffect, useState } from 'react';
 import api from '../../utils/axiosConfig';
 import '../../assets/styles/Panel.css';
+import { REFRESH_INTERVAL } from '../../utils/constants';
 
 const PanelPage = () => {
-  const [assets, setAssets] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [mensaje, setMensaje] = useState('');
+    const [assets, setAssets] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [mensaje, setMensaje] = useState('');
 
-  useEffect(() => {
+
     const cargarAssets = async () => {
-      try {
+        try {
         const response = await api.get('/assets');
         setAssets(response.data.data);
-      } catch (error) {
+        } catch (error) {
         setMensaje(error.response?.data?.message || 'Error al cargar los assets');
-      } finally {
+        } finally {
         setCargando(false);
-      }
+        }
     };
 
-    cargarAssets();
-  }, []);
+useEffect(() => {
+  cargarAssets();
+
+  const interval = setInterval(cargarAssets, REFRESH_INTERVAL);
+
+  return () => clearInterval(interval);
+}, []);
 
   if (cargando) {
     return <p className="panel-loading">Cargando assets...</p>;
