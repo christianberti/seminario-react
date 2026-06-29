@@ -1,17 +1,24 @@
 # React + Vite
-## Librerías Externas Utilizadas
 
-* **react-router-dom**: Se utiliza para gestionar el ruteo y la navegación entre las distintas vistas de la aplicación.
-* **axios**: Cliente HTTP configurado con interceptores para consumir la API del backend y enviar el token de sesión automáticamente en cada petición.
-* **react-icons**: Biblioteca de íconos utilizada en la interfaz.
+## Librerias Externas Utilizadas
 
-Instalación
+* **react-router-dom**: Se utiliza para gestionar el ruteo y la navegacion entre las distintas vistas de la aplicacion.
+* **axios**: Cliente HTTP configurado con interceptores para consumir la API del backend y enviar el token de sesion automaticamente en cada peticion.
+* **react-icons**: Biblioteca de iconos utilizada en la interfaz.
+* **recharts**: Se utiliza para mostrar el grafico de historial de precios de los assets en el Panel.
+
+## Instalacion
 
 Instalar todas las dependencias del proyecto:
 
+```bash
 npm install
-Ejecución
+```
+
+## Ejecucion
 
 Iniciar el entorno de desarrollo:
 
+```bash
 npm run dev
+```

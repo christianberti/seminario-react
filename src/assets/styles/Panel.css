@@ -20,9 +20,26 @@
   margin-top: 0;
 }
 
+.panel-message {
+  color: white;
+}
+
 .panel-error {
   color: red;
 }
+
+.panel-trend-subio {
+  color: green;
+}
+
+.panel-trend-bajo {
+  color: red;
+}
+
+.panel-trend-igual {
+  color: white;
+}
+
 .panel-buy {
   margin-top: 12px;
 }
@@ -41,6 +58,7 @@
   border: 1px solid white;
   padding: 12px;
   margin-top: 20px;
+  overflow-x: auto;
 }
 
 .panel-history button {
