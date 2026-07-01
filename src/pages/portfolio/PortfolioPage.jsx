@@ -144,6 +144,7 @@ const PortfolioPage = () => {
       });
 
       await cargarDatos();
+      window.dispatchEvent(new Event('portfolio-updated'));
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Error al realizar la compra');
     }
@@ -169,6 +170,7 @@ const PortfolioPage = () => {
       });
 
       await cargarDatos();
+      window.dispatchEvent(new Event('portfolio-updated')); // ← agregar acá
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Error al realizar la venta');
     }

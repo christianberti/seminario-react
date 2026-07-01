@@ -1,66 +1,148 @@
 .panel-container {
-  padding: 20px;
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--bg-color2);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.panel-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--secondary-color);
 }
 
 .panel-loading {
-  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+  color: var(--text-color);
+}
+
+.panel-message {
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--secondary-color);
+}
+
+.panel-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 4px;
 }
 
 .panel-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
   margin-top: 20px;
 }
 
 .panel-card {
-  border: 1px solid white;
-  padding: 12px;
-  margin-bottom: 12px;
+  background-color: var(--bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  flex: 1 1 280px;
+  min-width: 260px;
 }
 
 .panel-card h3 {
-  margin-top: 0;
-}
-
-.panel-message {
-  color: white;
-}
-
-.panel-error {
-  color: red;
+  margin-bottom: 8px;
+  color: var(--secondary-color);
 }
 
 .panel-trend-subio {
-  color: green;
+  color: yellowgreen;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .panel-trend-bajo {
-  color: red;
+  color: #dc3545;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .panel-trend-igual {
-  color: white;
+  color: #aaa;
+  margin-bottom: 8px;
 }
 
 .panel-buy {
   margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel-buy label {
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
 .panel-buy input {
   width: 80px;
-  margin-left: 8px;
-  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: var(--bg-color2);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.panel-buy input:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
 .panel-buy button {
-  display: block;
-  margin-top: 6px;
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+  width: fit-content;
 }
+
+.panel-buy button:hover:not(:disabled) {
+  background-color: #003d82;
+}
+
+.panel-buy button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .panel-history {
-  border: 1px solid white;
-  padding: 12px;
-  margin-top: 20px;
+  background-color: var(--bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 24px;
   overflow-x: auto;
 }
 
-.panel-history button {
-  margin-bottom: 10px;
+.panel-history h3 {
+  color: var(--secondary-color);
+  margin-bottom: 16px;
+}
+
+.panel-history > button {
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: background-color 0.3s;
+}
+
+.panel-history > button:hover {
+  background-color: #003d82;
 }

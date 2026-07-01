@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { REFRESH_INTERVAL } from '../utils/constants';
 import api from '../utils/axiosConfig';
 import '../assets/styles/NavbarComponent.css';
 
@@ -11,20 +12,25 @@ const NavBarComponent = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (auth.token && auth.userId) {
-      setLoading(true);
+  if (auth.token && auth.userId) {
+    const fetchPortfolio = () => {
       api.get(`/users/${auth.userId}`)
         .then((response) => {
-          const userData = response.data.data;
-          setPortfolioValue(userData.portfolio_value || 0);
+          setPortfolioValue(response.data.data.portfolio_value || 0);
         })
-        .catch((error) => {
-          console.error('Error fetching portfolio:', error);
-          setPortfolioValue(null);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [auth.token, auth.userId]);
+        .catch(() => setPortfolioValue(null));
+    };
+
+    fetchPortfolio();
+    const interval = setInterval(fetchPortfolio, REFRESH_INTERVAL);
+    window.addEventListener('portfolio-updated', fetchPortfolio);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('portfolio-updated', fetchPortfolio);
+    };
+  }
+}, [auth.token, auth.userId]);
 
   const handleLogout = () => {
     logout();
@@ -35,7 +41,7 @@ const NavBarComponent = () => {
     <nav className="navbar">
       {!auth.token ? (
         <>
-          <Link to="/registro">Registro de usuario</Link>
+          <Link to="/registro">Registro</Link>
           <Link to="/login">Login</Link>
         </>
       ) : (

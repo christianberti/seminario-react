@@ -91,8 +91,7 @@ return (
   <>
     {paginaActual > 1 && (
   <button onClick={() => setPaginaActual(p => p - 1)}>Anterior</button>
-  )}
-  )
+    )}
     <span>{paginaActual} de {Math.ceil(filteredUsers.length / usuariosPorPagina)}</span>
     {paginaActual < Math.ceil(filteredUsers.length / usuariosPorPagina) && (
       <button onClick={() => setPaginaActual(p => p + 1)}>Siguiente</button>

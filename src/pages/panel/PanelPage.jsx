@@ -129,6 +129,7 @@ const PanelPage = () => {
       });
 
       await cargarAssets(false);
+      window.dispatchEvent(new Event('portfolio-updated'));
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Error al realizar la compra');
     }
