@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import api from '../utils/axiosConfig';
 import { REFRESH_INTERVAL } from '../utils/constants';
 import '../assets/styles/StatPage.css';
 
+
 const StatPage = () => {
   const [assets, setAssets] = useState([]);
-  const [prevPrices, setPrevPrices] = useState({});
+  //const [prevPrices, setPrevPrices] = useState({});
+  const prevPrices = useRef({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterName, setFilterName] = useState('');
@@ -20,21 +22,21 @@ const StatPage = () => {
 
       const assetsWithTrend = newAssets.map(asset => ({
         ...asset,
-        trend: prevPrices[asset.id] != null
-          ? asset.current_price > prevPrices[asset.id] ? 'up'
-          : asset.current_price < prevPrices[asset.id] ? 'down'
-          : 'neutral'
+        trend: prevPrices.current[asset.id] != null
+          ? asset.current_price > prevPrices.current[asset.id] ? 'up'
+            : asset.current_price < prevPrices.current[asset.id] ? 'down'
+              : 'neutral'
           : 'neutral',
       }));
 
       const newPrevPrices = {};
       newAssets.forEach(a => newPrevPrices[a.id] = a.current_price);
-      setPrevPrices(newPrevPrices);
+      prevPrices.current = newPrevPrices;   // ya no hace falta setPrevPrices
 
       setAssets(assetsWithTrend);
       setError(null);
     } catch (err) {
-      setError('Error al cargar los assets. Intente nuevamente.');
+      setError('Error al cargar los assets. Intente nuevamente.',err);
     } finally {
       setLoading(false);
     }
