@@ -160,10 +160,8 @@ const PanelPage = () => {
     }
   };
 
-  const obtenerPrecioHistorial = (item) => (
-    Number(item.price ?? item.current_price ?? item.value ?? item.price_value)
-  );
-
+  const obtenerPrecioHistorial = (item) => Number(item.price_per_unit);
+  
   if (cargando) {
     return <p className="panel-loading">Cargando assets...</p>;
   }
