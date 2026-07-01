@@ -1,18 +1,18 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../utils/axiosConfig';
-import { AuthContext } from '../context/AuthContext';
+// import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/AdminPage.css';
 import { useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 
 
 const AdminPage = () => {
   
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
 
-if (!auth?.isAdmin) {
-  return <Navigate to="/" />;
-}
+// if (!auth?.isAdmin) {
+//   return <Navigate to="/" />;
+// }
 
 const navigate = useNavigate();
 const [users, setUsers] = useState([]);
@@ -75,7 +75,7 @@ return (
         </tr>
       </thead>
       <tbody>
-        {usuariosPaginados.map((user, index) => (
+        {usuariosPaginados.map((user) => (
           <tr key={user.id} className={mejorUsuario && user.id === mejorUsuario.id ? 'Mejor-Portfolio' : ''}>
             <td>{user.id}</td>
             <td>{user.name}</td>
