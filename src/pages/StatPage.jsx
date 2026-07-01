@@ -1,15 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import api from '../utils/axiosConfig';
+import { AuthContext } from '../context/AuthContext';
 import { REFRESH_INTERVAL } from '../utils/constants';
 import '../assets/styles/StatPage.css';
 
 
 const StatPage = () => {
+  const { auth } = useContext(AuthContext);
   const [assets, setAssets] = useState([]);
   //const [prevPrices, setPrevPrices] = useState({});
   const prevPrices = useRef({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [actualizando, setActualizando] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [filterPrice, setFilterPrice] = useState('');
   const [sortBy, setSortBy] = useState('name');
@@ -47,6 +50,18 @@ const StatPage = () => {
     const interval = setInterval(fetchAssets, REFRESH_INTERVAL);
     return () => clearInterval(interval);
   }, []);
+
+  const actualizarPrecios = async () => {
+    try {
+      setActualizando(true);
+      await api.put('/assets');
+      await fetchAssets();
+    } catch (err) {
+      setError('Error al actualizar los precios. Intente nuevamente.', err);
+    } finally {
+      setActualizando(false);
+    }
+  };
 
   const getFilteredAndSorted = () => {
     const filtered = assets
@@ -86,6 +101,15 @@ const StatPage = () => {
   return (
     <div className="stat-container">
       <h2 className="stat-title">Assets</h2>
+      {auth.isAdmin && (
+        <button
+          className="stat-update-btn"
+          onClick={actualizarPrecios}
+          disabled={actualizando}
+        >
+          {actualizando ? 'Actualizando...' : 'Actualizar precios'}
+        </button>
+      )}
       <div className="stat-filters">
         <input
           type="text"
