@@ -28,12 +28,7 @@ const Login = () => {
       const response = await api.post('/login', formData);
       const { name, isAdmin, userId } = response.data;
       
-      const token = response.data.token || response.headers.authorization || `token_${Date.now()}`;
-      
-      localStorage.setItem('token', token);
-      localStorage.setItem('name', name);
-      localStorage.setItem('isAdmin', isAdmin);
-      localStorage.setItem('userId', userId);
+      const token = (response.headers.authorization || '').replace('Bearer ', '');
       
       login(token, name, isAdmin, userId);
       navigate('/');

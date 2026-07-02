@@ -36,7 +36,7 @@ const EditarPage = () => {
         });
 
         } catch (err) {
-            setMensaje('Error al cargar usuario');
+            setMensaje('Error al cargar usuario', err);
         }
     };
 

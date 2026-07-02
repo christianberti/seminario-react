@@ -236,13 +236,15 @@ const PanelPage = () => {
             <p>Cargando historial...</p>
           ) : (
             <LineChart
-              width={500}
-              height={250}
-              data={historialPrecios.map((item, index) => ({
-                nombre: `Valor ${index + 1}`,
-                precio: obtenerPrecioHistorial(item),
-              }))}
-            >
+                width={500}
+                height={250}
+                data={[...historialPrecios]
+                  .reverse()
+                  .map((item, index) => ({
+                    nombre: `Valor ${index + 1}`,
+                    precio: obtenerPrecioHistorial(item),
+                  }))}
+              >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="nombre" />
               <YAxis />
